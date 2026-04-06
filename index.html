@@ -717,6 +717,9 @@
   /* ── FLUJO PRINCIPAL ─────────────────────────────────────── */
   btn.addEventListener('click', function startExperience() {
     btn.classList.add('hidden');
+    document.getElementById('trigger-wrap').style.opacity = '0';
+    document.getElementById('trigger-wrap').style.transition = 'opacity 0.4s ease';
+    document.getElementById('trigger-wrap').style.pointerEvents = 'none';
 
     /* 🔔 Sonido 1: campanita al abrir */
     playCampanita();
