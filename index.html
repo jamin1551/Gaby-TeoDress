@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Un mensaje especial de TeoDress para Gaby Castillo">
+<title>TeoDress — Para Gaby</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Pinyon+Script&family=Jost:wght@200;300&display=swap" rel="stylesheet">
+
+<style>
+  /* ── TOKENS ────────────────────────────────────────────────── */
+  :root {
+    --rosa:       #F8BBD0;
+    --rosa-deep:  #F48FB1;
+    --rosa-light: #FFF0F5;
+    --marino:     #1A237E;
+    --marino-mid: #3949AB;
+    --crema:      #FDF8F2;
+    --crema-dark: #F5EDE0;
+    --ink:        #2C1A0E;
+    --ink-soft:   #5C3D2E;
+    --dust:       rgba(248,187,208,0.18);
+  }
+
+  /* ── RESET ─────────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--crema);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    min-height: 100dvh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── TEXTURE OVERLAY ────────────────────────────────────────── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── PRELUDIO — SPLASH ──────────────────────────────────────── */
+  #splash {
+    position: fixed; inset: 0;
+    background: var(--crema);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    animation: splashOut 0.8s ease-in-out 2.4s forwards;
+  }
+  .splash-logo {
+    animation: logoReveal 1.6s ease-out forwards;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .splash-brandname {
+    font-family: 'Pinyon Script', cursive;
+    font-size: clamp(3.2rem, 10vw, 5.5rem);
+    color: var(--marino);
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .splash-tagline {
+    font-family: 'Jost', sans-serif;
+    font-weight: 200;
+    font-size: clamp(0.6rem, 2.5vw, 0.75rem);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .splash-bar {
+    width: 40px; height: 1px;
+    background: var(--rosa-deep);
+    margin-top: 1.2rem;
+    animation: barGrow 1s ease-out 0.8s forwards;
+    transform: scaleX(0);
+    transform-origin: center;
+  }
+
+  @keyframes logoReveal {
+    0%   { opacity: 0; transform: translateY(14px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes barGrow {
+    to { transform: scaleX(1); }
+  }
+  @keyframes splashOut {
+    0%   { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.04); pointer-events: none; }
+  }
+
+  /* ── ESCENA PRINCIPAL ───────────────────────────────────────── */
+  #scene {
+    position: fixed; inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    z-index: 1;
+    opacity: 0;
+    animation: sceneIn 0.8s ease 3s forwards;
+  }
+  @keyframes sceneIn {
+    to { opacity: 1; }
+  }
+
+  /* ── STAGE ──────────────────────────────────────────────────── */
+  #stage {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    height: 260px;
+    overflow: visible;
+  }
+
+  /* ── BOTÓN DISPARADOR ───────────────────────────────────────── */
+  #trigger-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .trigger-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.05rem, 3.5vw, 1.3rem);
+    color: var(--ink-soft);
+    letter-spacing: 0.01em;
+  }
+  #btn-open {
+    border: 1px solid var(--marino);
+    background: transparent;
+    color: var(--marino);
+    font-family: 'Jost', sans-serif;
+    font-weight: 200;
+    font-size: clamp(0.7rem, 2.8vw, 0.85rem);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 0.85rem 2.8rem;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.15s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  #btn-open::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--rosa);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+    z-index: -1;
+  }
+  #btn-open:hover::before { transform: scaleX(1); }
+  #btn-open:hover { color: var(--marino); border-color: var(--rosa-deep); }
+  #btn-open:active { transform: scale(0.97); }
+  #btn-open.hidden { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+
+  /* ── GATITO SVG ─────────────────────────────────────────────── */
+  #cat-wrap {
+    position: absolute;
+    bottom: 20px;
+    left: -140px;
+    width: 100px;
+    opacity: 0;
+  }
+  #cat-wrap.active {
+    opacity: 1;
+    animation: catWalk 2.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes catWalk {
+    0%   { left: -140px; }
+    60%  { left: calc(50% - 160px); }
+    70%  { left: calc(50% - 155px); transform: rotate(-3deg); }
+    80%  { left: calc(50% - 162px); transform: rotate(0deg); }
+    100% { left: calc(50% - 158px); }
+  }
+  /* Tail wag */
+  #cat-tail {
+    transform-origin: 8px 0px;
+    animation: none;
+  }
+  #cat-wrap.active #cat-tail {
+    animation: tailWag 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes tailWag {
+    from { transform: rotate(-18deg); }
+    to   { transform: rotate(18deg); }
+  }
+
+  /* ── CAJA DE REGALO SVG ─────────────────────────────────────── */
+  #box-wrap {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    opacity: 0;
+  }
+  #box-wrap.visible { opacity: 1; }
+  #box-wrap.push {
+    animation: boxPush 2.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes boxPush {
+    0%   { left: 50%; }
+    60%  { left: 54%; }
+    80%  { left: 49%; }
+    100% { left: 50%; }
+  }
+  #box-wrap.explode {
+    animation: boxBurst 0.4s ease-in forwards;
+  }
+  @keyframes boxBurst {
+    0%   { transform: translateX(-50%) scale(1); opacity: 1; }
+    50%  { transform: translateX(-50%) scale(1.25); opacity: 0.7; }
+    100% { transform: translateX(-50%) scale(0.5); opacity: 0; }
+  }
+
+  /* ── PARTÍCULAS PÉTALOS ─────────────────────────────────────── */
+  #petals-canvas {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0;
+  }
+  #petals-canvas.active { opacity: 1; }
+
+  /* ── MENSAJE FINAL ──────────────────────────────────────────── */
+  #message {
+    position: fixed; inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    z-index: 60;
+    opacity: 0;
+    pointer-events: none;
+    text-align: center;
+  }
+  #message.visible {
+    opacity: 1;
+    pointer-events: auto;
+    animation: msgIn 1.2s ease forwards;
+  }
+  @keyframes msgIn {
+    0%   { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .msg-brand {
+    font-family: 'Pinyon Script', cursive;
+    font-size: clamp(2.2rem, 8vw, 3.8rem);
+    color: var(--marino);
+    margin-bottom: 0.2rem;
+  }
+  .msg-divider {
+    width: 50px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rosa-deep), transparent);
+    margin: 0.8rem auto 1.4rem;
+  }
+  .msg-saludo {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.5rem, 5vw, 2.2rem);
+    color: var(--marino-mid);
+    margin-bottom: 1.2rem;
+  }
+  .msg-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1rem, 3.5vw, 1.25rem);
+    line-height: 1.85;
+    color: var(--ink-soft);
+    max-width: 38ch;
+    margin: 0 auto 1.8rem;
+  }
+  .msg-firma {
+    font-family: 'Pinyon Script', cursive;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    color: var(--rosa-deep);
+  }
+  .msg-sub {
+    font-family: 'Jost', sans-serif;
+    font-weight: 200;
+    font-size: clamp(0.6rem, 2vw, 0.7rem);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0.7;
+    margin-top: 0.4rem;
+  }
+  /* Decorative petals behind message */
+  #message::before,
+  #message::after {
+    content: '';
+    position: absolute;
+    border-radius: 50% 10% 50% 10%;
+    opacity: 0.12;
+  }
+  #message::before {
+    width: 260px; height: 260px;
+    background: var(--rosa-deep);
+    top: -60px; right: -60px;
+    transform: rotate(30deg);
+  }
+  #message::after {
+    width: 180px; height: 180px;
+    background: var(--marino);
+    bottom: -50px; left: -40px;
+    transform: rotate(-20deg);
+  }
+
+  /* ── FONDO DECORATIVO ───────────────────────────────────────── */
+  .bg-petal {
+    position: fixed;
+    border-radius: 50% 10% 50% 10%;
+    opacity: 0.07;
+    pointer-events: none;
+    z-index: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- Elementos decorativos de fondo -->
+<div class="bg-petal" style="width:320px;height:320px;background:var(--rosa-deep);top:-80px;left:-80px;transform:rotate(25deg)"></div>
+<div class="bg-petal" style="width:200px;height:200px;background:var(--marino);bottom:-50px;right:-50px;transform:rotate(-15deg)"></div>
+<div class="bg-petal" style="width:140px;height:140px;background:var(--rosa);top:40%;left:5%;transform:rotate(40deg)"></div>
+
+<!-- ══ PRELUDIO ══════════════════════════════════════════════════ -->
+<div id="splash" role="status" aria-label="Cargando TeoDress">
+  <div class="splash-logo">
+    <span class="splash-brandname">TeoDress</span>
+    <span class="splash-tagline">Elegancia en movimiento</span>
+    <div class="splash-bar"></div>
+  </div>
+</div>
+
+<!-- ══ ESCENA PRINCIPAL ══════════════════════════════════════════ -->
+<main id="scene" aria-label="Experiencia para Gaby">
+
+  <!-- Stage animado -->
+  <div id="stage" aria-hidden="true">
+
+    <!-- Caja de regalo SVG -->
+    <div id="box-wrap">
+      <svg viewBox="0 0 90 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Cuerpo de la caja -->
+        <rect x="5" y="40" width="80" height="55" rx="3" fill="#F8BBD0" stroke="#F48FB1" stroke-width="1.5"/>
+        <!-- Tapa -->
+        <rect x="2" y="28" width="86" height="18" rx="3" fill="#F48FB1" stroke="#CE93D8" stroke-width="1.5"/>
+        <!-- Franja vertical cinta -->
+        <rect x="39" y="28" width="12" height="67" rx="0" fill="white" opacity="0.5"/>
+        <!-- Franja horizontal cinta -->
+        <rect x="2" y="34" width="86" height="6" rx="0" fill="white" opacity="0.5"/>
+        <!-- Moño izquierdo -->
+        <ellipse cx="35" cy="25" rx="13" ry="8" fill="#F48FB1" stroke="#CE93D8" stroke-width="1" transform="rotate(-30 35 25)"/>
+        <!-- Moño derecho -->
+        <ellipse cx="55" cy="25" rx="13" ry="8" fill="#F48FB1" stroke="#CE93D8" stroke-width="1" transform="rotate(30 55 25)"/>
+        <!-- Centro del moño -->
+        <circle cx="45" cy="26" r="6" fill="#CE93D8"/>
+        <circle cx="45" cy="26" r="3" fill="#F8BBD0"/>
+        <!-- Detalles florales en la caja -->
+        <circle cx="22" cy="58" r="4" fill="#F48FB1" opacity="0.6"/>
+        <circle cx="22" cy="58" r="2" fill="white" opacity="0.4"/>
+        <circle cx="68" cy="72" r="3.5" fill="#F48FB1" opacity="0.5"/>
+        <circle cx="68" cy="72" r="1.8" fill="white" opacity="0.4"/>
+        <!-- Pequeñas flores -->
+        <circle cx="20" cy="80" r="2" fill="#F48FB1" opacity="0.4"/>
+        <circle cx="70" cy="55" r="2.5" fill="#F48FB1" opacity="0.4"/>
+      </svg>
+    </div>
+
+    <!-- Gatito SVG — estilo ilustración de tinta fina -->
+    <div id="cat-wrap" aria-hidden="true">
+      <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+        <!-- Cola -->
+        <g id="cat-tail">
+          <path d="M55 100 Q80 80 75 55 Q72 45 65 50" fill="none" stroke="#1A237E" stroke-width="2.5" stroke-linecap="round"/>
+        </g>
+        <!-- Cuerpo -->
+        <ellipse cx="48" cy="95" rx="28" ry="30" fill="var(--crema-dark)" stroke="#1A237E" stroke-width="1.8"/>
+        <!-- Barriga -->
+        <ellipse cx="48" cy="100" rx="16" ry="18" fill="white" opacity="0.6"/>
+        <!-- Cabeza -->
+        <ellipse cx="48" cy="52" rx="24" ry="22" fill="var(--crema-dark)" stroke="#1A237E" stroke-width="1.8"/>
+        <!-- Orejas -->
+        <polygon points="28,36 22,18 38,32" fill="var(--crema-dark)" stroke="#1A237E" stroke-width="1.5"/>
+        <polygon points="68,36 78,18 62,32" fill="var(--crema-dark)" stroke="#1A237E" stroke-width="1.5"/>
+        <!-- Interior orejas -->
+        <polygon points="29,34 25,22 36,31" fill="#F8BBD0" opacity="0.7"/>
+        <polygon points="67,34 75,22 64,31" fill="#F8BBD0" opacity="0.7"/>
+        <!-- Ojos -->
+        <ellipse cx="39" cy="50" rx="5" ry="6" fill="#1A237E"/>
+        <ellipse cx="57" cy="50" rx="5" ry="6" fill="#1A237E"/>
+        <circle cx="40.5" cy="48.5" r="1.8" fill="white"/>
+        <circle cx="58.5" cy="48.5" r="1.8" fill="white"/>
+        <!-- Nariz y boca -->
+        <path d="M46 57 L48 59 L50 57" fill="none" stroke="#F48FB1" stroke-width="1.5" stroke-linecap="round"/>
+        <ellipse cx="48" cy="56.5" rx="2.5" ry="2" fill="#F48FB1"/>
+        <!-- Bigotes -->
+        <line x1="25" y1="56" x2="40" y2="57.5" stroke="#1A237E" stroke-width="0.8" opacity="0.5"/>
+        <line x1="25" y1="60" x2="40" y2="59.5" stroke="#1A237E" stroke-width="0.8" opacity="0.5"/>
+        <line x1="71" y1="56" x2="56" y2="57.5" stroke="#1A237E" stroke-width="0.8" opacity="0.5"/>
+        <line x1="71" y1="60" x2="56" y2="59.5" stroke="#1A237E" stroke-width="0.8" opacity="0.5"/>
+        <!-- Patitas delanteras -->
+        <ellipse cx="32" cy="118" rx="10" ry="7" fill="var(--crema-dark)" stroke="#1A237E" stroke-width="1.5"/>
+        <ellipse cx="64" cy="118" rx="10" ry="7" fill="var(--crema-dark)" stroke="#1A237E" stroke-width="1.5"/>
+        <!-- Deditos -->
+        <line x1="26" y1="123" x2="26" y2="125" stroke="#1A237E" stroke-width="1" stroke-linecap="round"/>
+        <line x1="32" y1="124" x2="32" y2="126" stroke="#1A237E" stroke-width="1" stroke-linecap="round"/>
+        <line x1="38" y1="123" x2="38" y2="125" stroke="#1A237E" stroke-width="1" stroke-linecap="round"/>
+        <line x1="58" y1="123" x2="58" y2="125" stroke="#1A237E" stroke-width="1" stroke-linecap="round"/>
+        <line x1="64" y1="124" x2="64" y2="126" stroke="#1A237E" stroke-width="1" stroke-linecap="round"/>
+        <line x1="70" y1="123" x2="70" y2="125" stroke="#1A237E" stroke-width="1" stroke-linecap="round"/>
+        <!-- Collar con moño -->
+        <rect x="27" y="68" width="42" height="6" rx="3" fill="#F48FB1" stroke="#CE93D8" stroke-width="1"/>
+        <ellipse cx="48" cy="71" rx="4" ry="3.5" fill="#1A237E"/>
+        <circle cx="48" cy="71" r="1.5" fill="#F8BBD0"/>
+        <!-- Rayitas de pelaje -->
+        <path d="M38 44 Q40 40 42 44" fill="none" stroke="#1A237E" stroke-width="0.8" opacity="0.4"/>
+        <path d="M54 44 Q56 40 58 44" fill="none" stroke="#1A237E" stroke-width="0.8" opacity="0.4"/>
+      </svg>
+    </div>
+
+  </div><!-- /stage -->
+
+  <!-- Botón disparador -->
+  <div id="trigger-wrap">
+    <p class="trigger-label">Hay algo esperando por ti…</p>
+    <button id="btn-open" aria-label="Abrir el regalo de TeoDress">
+      Gaby, abre esto&nbsp;✦
+    </button>
+  </div>
+
+</main>
+
+<!-- Canvas de pétalos -->
+<canvas id="petals-canvas" aria-hidden="true"></canvas>
+
+<!-- Mensaje final -->
+<section id="message" aria-live="polite" aria-atomic="true">
+  <p class="msg-brand">TeoDress</p>
+  <div class="msg-divider"></div>
+  <p class="msg-saludo">Para Gaby, con todo el cariño</p>
+  <p class="msg-body">
+    Hay personas que llegan a tu vida justo cuando más las necesitas,<br>
+    y con solo su presencia lo cambian todo.<br><br>
+    Tú fuiste la primera en creer —<br>
+    la primera clienta, la primera amiga que dijo <em>sí</em>.<br><br>
+    Gracias por ser parte del comienzo de este sueño.<br>
+    TeoDress existe un poco por ti también.
+  </p>
+  <p class="msg-firma">Con amor,</p>
+  <p class="msg-sub">TeoDress · El Salvador</p>
+</section>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── REFERENCIAS ──────────────────────────────────────────── */
+  const btn      = document.getElementById('btn-open');
+  const catWrap  = document.getElementById('cat-wrap');
+  const boxWrap  = document.getElementById('box-wrap');
+  const canvas   = document.getElementById('petals-canvas');
+  const msgEl    = document.getElementById('message');
+  const ctx      = canvas.getContext('2d');
+
+  /* ── WEB AUDIO ENGINE ─────────────────────────────────────── */
+  let AC = null;
+
+  function getAC() {
+    if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+    return AC;
+  }
+
+  /* Utilidad: rampa de volumen suave */
+  function ramp(param, from, to, start, dur) {
+    param.setValueAtTime(from, start);
+    param.linearRampToValueAtTime(to, start + dur);
+  }
+
+  /*
+   * 🔔 CAMPANITA — al presionar el botón
+   * Oscilador sinusoidal en Re5 (587 Hz) + armónico en La5 (880 Hz)
+   * Evoca una campanilla de boutique.
+   */
+  function playCampanita() {
+    const ac   = getAC();
+    const now  = ac.currentTime;
+    const gain = ac.createGain();
+    gain.connect(ac.destination);
+
+    [[587, 0.18], [880, 0.09], [1174, 0.05]].forEach(([freq, vol], i) => {
+      const osc = ac.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      osc.connect(gain);
+      osc.start(now + i * 0.04);
+      osc.stop(now + 1.8);
+    });
+
+    ramp(gain.gain, 0, 0.22, now, 0.01);
+    gain.gain.setValueAtTime(0.22, now + 0.05);
+    ramp(gain.gain, 0.22, 0, now + 0.1, 1.6);
+  }
+
+  /*
+   * 💥 POP BURST — al explotar la caja
+   * Ruido blanco filtrado con envolvente percusiva rápida +
+   * tono burbujeante descendente (pitch bend).
+   */
+  function playPopBurst() {
+    const ac  = getAC();
+    const now = ac.currentTime;
+
+    /* Ruido percusivo */
+    const bufLen = ac.sampleRate * 0.18;
+    const buf    = ac.createBuffer(1, bufLen, ac.sampleRate);
+    const data   = buf.getChannelData(0);
+    for (let i = 0; i < bufLen; i++) data[i] = Math.random() * 2 - 1;
+
+    const src    = ac.createBufferSource();
+    src.buffer   = buf;
+
+    const filter = ac.createBiquadFilter();
+    filter.type  = 'bandpass';
+    filter.frequency.value = 1200;
+    filter.Q.value = 0.8;
+
+    const g = ac.createGain();
+    src.connect(filter);
+    filter.connect(g);
+    g.connect(ac.destination);
+    ramp(g.gain, 0.35, 0, now, 0.18);
+    src.start(now);
+
+    /* Tono burbujeante */
+    const osc2 = ac.createOscillator();
+    osc2.type  = 'sine';
+    osc2.frequency.setValueAtTime(520, now);
+    osc2.frequency.exponentialRampToValueAtTime(180, now + 0.22);
+
+    const g2 = ac.createGain();
+    osc2.connect(g2);
+    g2.connect(ac.destination);
+    ramp(g2.gain, 0.15, 0, now, 0.22);
+    osc2.start(now);
+    osc2.stop(now + 0.25);
+
+    /* Brillo agudo corto */
+    [1046, 1318].forEach((f, i) => {
+      const o = ac.createOscillator();
+      o.type  = 'sine';
+      o.frequency.value = f;
+      const gx = ac.createGain();
+      o.connect(gx); gx.connect(ac.destination);
+      ramp(gx.gain, 0.08, 0, now + i * 0.03, 0.25);
+      o.start(now + i * 0.03);
+      o.stop(now + 0.3 + i * 0.03);
+    });
+  }
+
+  /*
+   * ✨ SHIMMER — al aparecer el mensaje
+   * Acorde de Mi mayor (Mi4‑Sol#4‑Si4‑Mi5) con envolvente lenta
+   * tipo "caja de música" usando osciladores triangulares.
+   */
+  function playShimmer() {
+    const ac  = getAC();
+    const now = ac.currentTime;
+
+    /* Acorde romántico: E4 G#4 B4 E5 */
+    const freqs = [329.63, 415.30, 493.88, 659.25];
+
+    freqs.forEach((freq, i) => {
+      const osc  = ac.createOscillator();
+      osc.type   = 'triangle';
+      osc.frequency.value = freq;
+
+      /* Vibrato sutil */
+      const lfo  = ac.createOscillator();
+      lfo.frequency.value = 5.2;
+      const lfoG = ac.createGain();
+      lfoG.gain.value = 1.8;
+      lfo.connect(lfoG);
+      lfoG.connect(osc.frequency);
+      lfo.start(now);
+
+      const g = ac.createGain();
+      osc.connect(g);
+      g.connect(ac.destination);
+
+      const delay  = i * 0.12;
+      const attack = 0.4;
+      const hold   = 1.8;
+      const rel    = 1.2;
+
+      g.gain.setValueAtTime(0, now + delay);
+      g.gain.linearRampToValueAtTime(0.07, now + delay + attack);
+      g.gain.setValueAtTime(0.07, now + delay + attack + hold);
+      g.gain.linearRampToValueAtTime(0, now + delay + attack + hold + rel);
+
+      osc.start(now + delay);
+      osc.stop(now + delay + attack + hold + rel + 0.1);
+      lfo.stop(now + delay + attack + hold + rel + 0.1);
+    });
+  }
+
+  let petals = [];
+  let animFrame;
+  let running = false;
+
+  /* ── RESIZE CANVAS ────────────────────────────────────────── */
+  function resizeCanvas() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  /* ── PALETA DE PÉTALOS ────────────────────────────────────── */
+  const PETAL_COLORS = [
+    '#F8BBD0','#F48FB1','#FFCDD2','#FCE4EC',
+    '#E1BEE7','#CE93D8','#FFFFFF','#FFB3C1',
+    '#F5C6D0','#FFD6E7'
+  ];
+
+  /* ── CREAR UN PÉTALO ──────────────────────────────────────── */
+  function createPetal(cx, cy) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 2.5 + Math.random() * 5;
+    return {
+      x:     cx,
+      y:     cy,
+      vx:    Math.cos(angle) * speed,
+      vy:    Math.sin(angle) * speed - (4 + Math.random() * 3),
+      w:     8  + Math.random() * 18,
+      h:     5  + Math.random() * 10,
+      rot:   Math.random() * Math.PI * 2,
+      rotV:  (Math.random() - 0.5) * 0.18,
+      color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
+      alpha: 1,
+      fade:  0.006 + Math.random() * 0.006,
+      grav:  0.12 + Math.random() * 0.1,
+      drift: (Math.random() - 0.5) * 0.08,
+    };
+  }
+
+  /* ── BURST INICIAL ────────────────────────────────────────── */
+  function burst(cx, cy) {
+    for (let i = 0; i < 120; i++) {
+      petals.push(createPetal(cx, cy));
+    }
+    /* Lluvia continua por 3 s */
+    let elapsed = 0;
+    const rain = setInterval(() => {
+      for (let i = 0; i < 6; i++) {
+        petals.push({
+          ...createPetal(
+            Math.random() * canvas.width,
+            -20
+          ),
+          vy: 1.5 + Math.random() * 2.5,
+          vx: (Math.random() - 0.5) * 1.5,
+        });
+      }
+      elapsed += 100;
+      if (elapsed >= 3000) clearInterval(rain);
+    }, 100);
+  }
+
+  /* ── LOOP DE ANIMACIÓN ────────────────────────────────────── */
+  function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    petals = petals.filter(p => p.alpha > 0);
+
+    petals.forEach(p => {
+      p.x   += p.vx;
+      p.y   += p.vy;
+      p.vy  += p.grav;
+      p.vx  += p.drift;
+      p.rot += p.rotV;
+      p.alpha -= p.fade;
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.beginPath();
+      /* Forma orgánica de pétalo */
+      ctx.ellipse(0, 0, p.w / 2, p.h / 2, 0, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      ctx.restore();
+    });
+
+    if (petals.length > 0 || running) {
+      animFrame = requestAnimationFrame(loop);
+    }
+  }
+
+  /* ── FLUJO PRINCIPAL ─────────────────────────────────────── */
+  btn.addEventListener('click', function startExperience() {
+    btn.classList.add('hidden');
+
+    /* 🔔 Sonido 1: campanita al abrir */
+    playCampanita();
+
+    /* 1. Mostrar caja */
+    boxWrap.classList.add('visible');
+
+    /* 2. Activar gatito + caja empujándose */
+    setTimeout(() => {
+      catWrap.classList.add('active');
+      boxWrap.classList.add('push');
+    }, 200);
+
+    /* 3. Al llegar — explotar caja y lanzar pétalos */
+    setTimeout(() => {
+      const boxRect = boxWrap.getBoundingClientRect();
+      const cx = boxRect.left + boxRect.width  / 2;
+      const cy = boxRect.top  + boxRect.height / 2;
+
+      boxWrap.classList.add('explode');
+      catWrap.style.opacity = '0';
+      catWrap.style.transition = 'opacity 0.4s ease';
+
+      /* 💥 Sonido 2: pop burst al explotar */
+      playPopBurst();
+
+      canvas.classList.add('active');
+      running = true;
+      burst(cx, cy);
+      loop();
+
+      /* 4. Mostrar mensaje */
+      setTimeout(() => {
+        running = false;
+        msgEl.classList.add('visible');
+        /* ✨ Sonido 3: shimmer al aparecer el mensaje */
+        playShimmer();
+      }, 900);
+
+    }, 2700);
+  }, { once: true });
+
+})();
+</script>
+</body>
+</html>
